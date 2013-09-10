@@ -191,6 +191,13 @@ class FormForForm(forms.ModelForm):
             if field.placeholder_text and not field.default:
                 text = field.placeholder_text
                 self.fields[field_key].widget.attrs["placeholder"] = text
+           # if settings.USE_HTML5 and field.pattern:
+           #     pattern = field.pattern
+           #     self.fields[field_key].widget.attrs["pattern"] = pattern
+            if settings.USE_HTML5 and field.error_text:
+                error_text = field.error_text
+                self.fields[field_key].widget.attrs["title"] = error_text
+                self.fields[field_key].widget.attrs["x-moz-errormessage"] = error_text                
 
     def save(self, **kwargs):
         """
