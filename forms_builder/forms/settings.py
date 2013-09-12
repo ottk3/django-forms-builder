@@ -41,3 +41,6 @@ HELPTEXT_MAX_LENGTH = getattr(settings, "FORMS_BUILDER_HELPTEXT_MAX_LENGTH", 100
 
 # The maximum allowed length for field choices
 CHOICES_MAX_LENGTH = getattr(settings, "FORMS_BUILDER_CHOICES_MAX_LENGTH", 1000)
+
+# The maximum allowed length for field error text
+ERRORTEXT_MAX_LENGTH = getattr(settings, "FORMS_BUILDER_ERRORTEXT_MAX_LENGTH", 100)

@@ -140,12 +140,16 @@ class FormForForm(forms.ModelForm):
             field_class = fields.CLASSES[field.field_type]
             field_widget = fields.WIDGETS.get(field.field_type)
             field_args = {"label": field.label, "required": field.required,
-                          "help_text": field.help_text}
+                          "help_text": field.help_text, "error_messages": {"invalid": field.error_text}}
             arg_names = field_class.__init__.im_func.func_code.co_varnames
             if "max_length" in arg_names:
                 field_args["max_length"] = settings.FIELD_MAX_LENGTH
             if "choices" in arg_names:
                 field_args["choices"] = field.get_choices()
+            # Change Field to RegexField
+            if field.choices and field.is_a(*fields.PATTERNS):
+                field_class = forms.RegexField
+                field_args["regex"] = field.choices
             if field_widget is not None:
                 field_args["widget"] = field_widget
             #
@@ -191,6 +195,12 @@ class FormForForm(forms.ModelForm):
             if field.placeholder_text and not field.default:
                 text = field.placeholder_text
                 self.fields[field_key].widget.attrs["placeholder"] = text
+            if (settings.USE_HTML5 and field.choices and
+                    field.is_a(*fields.PATTERNS)):
+                self.fields[field_key].widget.attrs["pattern"] = field.choices
+            if settings.USE_HTML5 and field.error_text:
+                self.fields[field_key].widget.attrs["title"] = field.error_text
+                self.fields[field_key].widget.attrs["x-moz-errormessage"] = field.error_text 
 
     def save(self, **kwargs):
         """

@@ -154,6 +154,8 @@ class AbstractField(models.Model):
     placeholder_text = models.CharField(_("Placeholder Text"), null=True,
         blank=True, max_length=100, editable=settings.USE_HTML5)
     help_text = models.CharField(_("Help text"), blank=True, max_length=settings.HELPTEXT_MAX_LENGTH)
+    error_text = models.CharField(_("Error text"), blank=True, max_length=settings.ERRORTEXT_MAX_LENGTH)
+
 
     objects = FieldManager()
 
